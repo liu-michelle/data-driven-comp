@@ -69,7 +69,7 @@ let time = 0
   nn.on('load', setup)
   nn.on('load', getData)
   nn.on('load', () => {
-    setInterval(newPoem, 500)
+    setInterval(newPoem, 250)
     setInterval(newImg, 5000)
     time += 50
   })
