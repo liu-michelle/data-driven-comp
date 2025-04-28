@@ -1,0 +1,64 @@
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js?v=1"></script>
+<script>
+/* global nn */
+  
+const words = []
+const APIKey = 'aa0381e8e276034a3fd641ba736775ad'
+const url = `https://gnews.io/api/v4/search?q=economy&lang=en&country=us&apikey=${APIKey}`
+  
+
+function setup () {
+  nn.get('body').css({
+    display: 'grid',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    cursor: 'pointer'
+  })
+
+}
+
+function newPoem () {
+  const wordCount = nn.random(5,10)
+  const poemWords = []
+  for (let i = 0; i < wordCount; i++) {
+    const randomWord = nn.random(words)
+    poemWords.push(randomWord)
+    const textElement = document.createElement("div")
+    textElement.innerText = randomWord
+    const randomFontSize = Math.floor(Math.random() * (42 - 16 + 1)) + 16 + 'px';
+    textElement.style.fontSize = randomFontSize;
+    textElement.style.position = "absolute";
+    textElement.style.fontVariant = "small-caps";
+    textElement.style.top = Math.random() * (window.innerHeight) + 'px';
+    textElement.style.left = Math.random() * (window.innerWidth) + 'px';
+    textElement.style.opacity = Math.random()
+  document.body.appendChild(textElement);
+  }
+  
+}
+
+async function getData () {
+  const res = await fetch(url)
+  const json = await res.json()
+  console.log(json)
+  
+  for (let i = 0; i < json.articles.length; i++) {
+    const article = json.articles[i]
+    const titleWords = article.title.split(' ')
+    const descWords = article.description.split(' ')
+    words.push(...titleWords)
+    words.push(...descWords)
+  }
+  
+  newPoem()
+}
+
+
+nn.on('load', setup)  
+nn.on('load', getData)
+  nn.on('load', () => {
+  setInterval(newPoem, 1000)
+})
+  
+</script>
