@@ -3,6 +3,7 @@
 /* global nn */
   
 const words = []
+const imgs = []
 const APIKey = 'aa0381e8e276034a3fd641ba736775ad'
 const url = `https://gnews.io/api/v4/search?q=economy&lang=en&country=us&apikey=${APIKey}`
   
@@ -33,7 +34,16 @@ function newPoem () {
     textElement.style.top = Math.random() * (window.innerHeight) + 'px';
     textElement.style.left = Math.random() * (window.innerWidth) + 'px';
     textElement.style.opacity = Math.random()
-  document.body.appendChild(textElement);
+    document.body.appendChild(textElement);
+    
+    const img = document.createElement('img');
+    const randomImg = nn.random(imgs)
+    img.src = randomImg;
+    img.style.position = 'absolute';
+    img.style.top = Math.random() * (window.innerHeight - 200) + 'px';
+    img.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+
+    document.body.appendChild(img);
   }
   
 }
@@ -46,9 +56,11 @@ async function getData () {
   for (let i = 0; i < json.articles.length; i++) {
     const article = json.articles[i]
     const titleWords = article.title.split(' ')
+    const image = article.image
     const descWords = article.description.split(' ')
     words.push(...titleWords)
     words.push(...descWords)
+    imgs.push(image)
   }
   
   newPoem()
